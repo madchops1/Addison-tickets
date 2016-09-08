@@ -1,0 +1,33 @@
+AddType application/x-httpd-php .php5
+
+<Limit GET POST>
+  Order Allow,Deny
+  Allow from all
+</Limit>
+
+# DEFAULTS
+AddDefaultCharset UTF-8
+DefaultLanguage en-US
+SetEnv TZ America/Chicago
+
+# HEADER
+Header set Access-Control-Allow-Origin "*"
+
+# MOD REWRITE
+Options +FollowSymlinks
+RewriteEngine On
+
+# DUMMY CONNECTIONS
+RewriteCond %{HTTP_USER_AGENT} ^.*internal\ dummy\ connection.*$ [NC]
+RewriteRule .* - [F,L]
+
+# FORCE WWW
+#RewriteCond %{HTTP_HOST} !^(www|dev)\. [NC]
+#RewriteRule ^(.*)$ http://www.%{HTTP_HOST}/$1 [R=301,L] 
+
+# Allow any files or directories that exist to be displayed directly
+RewriteCond %{REQUEST_FILENAME} \.(gif|jpe?g|png|js|css|swf|php|ico|txt|pdf|xml|ttf|eot|svg|woff|html)$
+RewriteRule ^ - [L]
+
+# Rewrite the website url into the request
+RewriteRule ^(.*)$ index.php?request=%{THE_REQUEST} [NC,L]
