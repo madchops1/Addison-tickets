@@ -1,5 +1,4 @@
 <?php
-echo "1942946222";
-
+var_dump($_REQUEST);
 
 ?>
